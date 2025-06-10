@@ -1,1 +1,2 @@
-@Authors: Ranjit, Nishan, Rupesh
+@Authors:
+ Ranjit, Nishan, Rupesh
