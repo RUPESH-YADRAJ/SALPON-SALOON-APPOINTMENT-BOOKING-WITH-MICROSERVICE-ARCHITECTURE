@@ -6,10 +6,10 @@ const SaloonDetail = () => {
         <div className='space-y-5 mb-20'>
             <section className="grid grid-cols-2 gap-3">
                 <div className='col-span-2'>
-                    <img className='w-full rounded-md h-[15rem] object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB9aMTuhmD9Q11l2PKy8MyzYyjsfbDgKq_rA&s" alt="" />
+                    <img className='w-full rounded-md h-[15rem] object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpUrfawq7Z2hOHDGzcpFJSHT1cDQpH__TUOw&s" alt="" />
                 </div>
                 <div className='col-span-1'>
-                    <img className='w-full rounded-md h-[15rem] object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpUrfawq7Z2hOHDGzcpFJSHT1cDQpH__TUOw&s" alt="" />
+                    <img className='w-full rounded-md h-[15rem] object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx0RIppj5aIC1KRh2aerPBmj-dv5CwiJzlcQ&s" alt="" />
                 </div>
                 <div className='col-span-1'>
                     <img className='w-full rounded-md h-[15rem] object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKsLHcbrOS59g40FR8HQIBqKLxtkveEVxj9A&s" alt="" />
