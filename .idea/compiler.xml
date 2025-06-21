@@ -9,11 +9,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="salon_service" />
         <module name="user_service" />
+        <module name="category_service" />
+        <module name="booking_service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="booking_service" options="-parameters" />
+      <module name="category_service" options="-parameters" />
       <module name="salon_service" options="-parameters" />
       <module name="user_service" options="-parameters" />
     </option>
