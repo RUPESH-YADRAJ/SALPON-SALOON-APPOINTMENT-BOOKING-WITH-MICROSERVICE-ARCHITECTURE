@@ -3,6 +3,7 @@ import SaloonDetail from "./SaloonDetail";
 import { Button } from "@mui/material";
 import SaloonServiceDetails from "./SaloonServiceDetails";
 import Review from "../../Review/Review";
+import CreateReviewForm from "../../Review/CreateReviewForm";
 
 const tabs = [{ name: "All Services" }, { name: "Reviews" }, { name: "Create Review" }]
 const SaloonDetails = () => {
@@ -22,7 +23,8 @@ const SaloonDetails = () => {
             </div>
             <div>
                 {
-                    activeTab.name === "Create Review" ? <div>
+                    activeTab.name === "Create Review" ? <div className='flex justify-center'>
+                        <CreateReviewForm />
 
 
                     </div> : activeTab.name === "Reviews" ?
