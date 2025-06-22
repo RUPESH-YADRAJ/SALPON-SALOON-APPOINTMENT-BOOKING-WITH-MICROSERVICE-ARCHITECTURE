@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/salons/")
+@RequestMapping("/api/salons")
 public class SalonController {
     private final SalonService salonService;
 
@@ -29,7 +29,7 @@ public class SalonController {
         return ResponseEntity.ok(SalonMapper.toSalonDto(salon));
     }
 
-    @PatchMapping("{salonId}")
+    @PatchMapping("/{salonId}")
     public ResponseEntity<SalonDto> updateSalon(@PathVariable Long salonId,@RequestBody SalonDto salonDto) {
         UserDto userDto = new UserDto();
         userDto.setId(1L);
@@ -44,14 +44,14 @@ public class SalonController {
         return ResponseEntity.ok(salonDos);
     }
 
-    @GetMapping("{salonId}")
+    @GetMapping("/{salonId}")
     public ResponseEntity<SalonDto> getSalonById(@PathVariable Long salonId) {
         Salon salon=salonService.getSalonById(salonId);
         return ResponseEntity.ok(SalonMapper.toSalonDto(salon));
     }
 
 
-    @GetMapping("search")
+    @GetMapping("/search")
     public ResponseEntity<List<SalonDto>> searchSalons(@RequestParam("city") String city) {
         List<Salon> salon=salonService.searchSalonByCity(city);
         List<SalonDto> salonDos=salon.stream().map(SalonMapper::toSalonDto).toList();
@@ -59,7 +59,7 @@ public class SalonController {
     }
 
 
-    @GetMapping("owner")
+    @GetMapping("/owner")
     public ResponseEntity<SalonDto> getSalonByOwnerId() {
         UserDto userDto = new UserDto();
         userDto.setId(1L);

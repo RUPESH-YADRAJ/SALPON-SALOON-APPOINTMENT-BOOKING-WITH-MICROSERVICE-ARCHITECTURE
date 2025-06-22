@@ -7,19 +7,27 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="salon_service" />
         <module name="user_service" />
         <module name="category_service" />
         <module name="payment_service" />
+        <module name="eureka" />
+        <module name="salon_service" />
+        <module name="gateway-server" />
         <module name="booking_service" />
         <module name="service_offering" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-gateway-server" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gateway-server" options="-parameters" />
       <module name="booking_service" options="-parameters" />
       <module name="category_service" options="-parameters" />
+      <module name="eureka" options="-parameters" />
+      <module name="gateway-server" options="-parameters" />
       <module name="payment_service" options="-parameters" />
       <module name="salon_service" options="-parameters" />
       <module name="service_offering" options="-parameters" />
