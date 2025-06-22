@@ -1,8 +1,8 @@
-import { DriveFileMove } from "@mui/icons-material";
 import React, { useState } from "react";
 import SaloonDetail from "./SaloonDetail";
 import { Button } from "@mui/material";
 import SaloonServiceDetails from "./SaloonServiceDetails";
+import Review from "../../Review/Review";
 
 const tabs = [{ name: "All Services" }, { name: "Reviews" }, { name: "Create Review" }]
 const SaloonDetails = () => {
@@ -22,8 +22,11 @@ const SaloonDetails = () => {
             </div>
             <div>
                 {
-                    activeTab.name == "Create Review" ? <div>Create Review Form</div> : activeTab.name === "Reviews" ?
-                        <div>Review List</div> : <div>
+                    activeTab.name === "Create Review" ? <div>
+
+
+                    </div> : activeTab.name === "Reviews" ?
+                        <div><Review /></div> : <div>
                             <SaloonServiceDetails></SaloonServiceDetails>
                         </div>
 
