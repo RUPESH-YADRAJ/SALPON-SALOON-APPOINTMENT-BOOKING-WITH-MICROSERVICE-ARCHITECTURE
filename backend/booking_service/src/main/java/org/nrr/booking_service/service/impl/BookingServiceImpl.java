@@ -1,9 +1,9 @@
 package org.nrr.booking_service.service.impl;
 
 import org.nrr.booking_service.dto.BookingRequest;
-import org.nrr.booking_service.dto.SalonDTO;
-import org.nrr.booking_service.dto.ServiceDTO;
-import org.nrr.booking_service.dto.UserDTO;
+import org.nrr.booking_service.dto.SalonDto;
+import org.nrr.booking_service.dto.ServiceDto;
+import org.nrr.booking_service.dto.UserDto;
 import org.nrr.booking_service.model.Booking;
 import org.nrr.booking_service.model.BookingStatus;
 import org.nrr.booking_service.model.SalonReport;
@@ -28,21 +28,21 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking createBooking(BookingRequest bookingRequest,
-                                 UserDTO userDTO,
-                                 SalonDTO salonDTO,
-                                 Set<ServiceDTO> serviceDTOSet) throws Exception {
-        int totalDuration=serviceDTOSet.stream()
-                .mapToInt(ServiceDTO::getDuration)
+                                 UserDto userDTO,
+                                 SalonDto salonDTO,
+                                 Set<ServiceDto> serviceDtoSet) throws Exception {
+        int totalDuration= serviceDtoSet.stream()
+                .mapToInt(ServiceDto::getDuration)
                 .sum();
         LocalDateTime bookingStartTime=bookingRequest.getStartTime();
         LocalDateTime bookingEndTime=bookingStartTime.plusMinutes(totalDuration);
 
         Boolean isAvailable=isTimeSlotAvailable(salonDTO,bookingStartTime,bookingEndTime);
-        int totalPrice=serviceDTOSet.stream()
-                .mapToInt(ServiceDTO::getPrice)
+        int totalPrice= serviceDtoSet.stream()
+                .mapToInt(ServiceDto::getPrice)
                 .sum();
-        Set<Long> idList=serviceDTOSet.stream()
-                .map(ServiceDTO::getId)
+        Set<Long> idList= serviceDtoSet.stream()
+                .map(ServiceDto::getId)
                 .collect(Collectors.toSet());
 
         Booking newBooking=Booking.builder()
@@ -57,9 +57,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.save(newBooking);
     }
 
-    public Boolean isTimeSlotAvailable(SalonDTO salonDTO,
-                                        LocalDateTime bookingStartTime,
-                                        LocalDateTime bookingEndTime) throws Exception {
+    public Boolean isTimeSlotAvailable(SalonDto salonDTO,
+                                       LocalDateTime bookingStartTime,
+                                       LocalDateTime bookingEndTime) throws Exception {
 
         List<Booking> existingBookings=getBookingBySalon(salonDTO.getId());
 

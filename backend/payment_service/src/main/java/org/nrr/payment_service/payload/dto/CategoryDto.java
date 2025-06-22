@@ -1,9 +1,9 @@
-package org.nrr.booking_service.dto;
+package org.nrr.payment_service.payload.dto;
 
 import lombok.Data;
 
 @Data
-public class CategoryDTO {
+public class CategoryDto {
 
     private Long id;
 

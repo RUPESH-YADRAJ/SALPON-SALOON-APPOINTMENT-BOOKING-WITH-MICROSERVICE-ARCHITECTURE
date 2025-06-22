@@ -1,11 +1,11 @@
 package org.nrr.booking_service.mapper;
 
-import org.nrr.booking_service.dto.BookingDTO;
+import org.nrr.booking_service.dto.BookingDto;
 import org.nrr.booking_service.model.Booking;
 
 public class BookingMapper {
-    public static BookingDTO toBookingDto(Booking booking) {
-        return BookingDTO.builder()
+    public static BookingDto toBookingDto(Booking booking) {
+        return BookingDto.builder()
                 .id(booking.getId())
                 .bookingStatus(booking.getBookingStatus())
                 .customerId(booking.getCustomerId())

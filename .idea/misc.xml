@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/backend/salon_service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/category_service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/booking_service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/service_offering/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/payment_service/pom.xml" />
       </list>
     </option>
   </component>

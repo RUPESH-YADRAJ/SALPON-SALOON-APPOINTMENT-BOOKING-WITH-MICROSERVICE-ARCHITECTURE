@@ -1,16 +1,14 @@
-package org.nrr.booking_service.dto;
+package org.nrr.payment_service.payload.dto;
 
-import jakarta.persistence.ElementCollection;
 import lombok.Builder;
 import lombok.Data;
-import org.nrr.booking_service.model.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
 @Builder
-public class BookingDTO {
+public class BookingDto {
     private Long id;
 
     private Long salonId;
@@ -22,8 +20,6 @@ public class BookingDTO {
     private LocalDateTime endTime;
 
     private Set<Long> serviceId;
-
-    private BookingStatus bookingStatus=BookingStatus.PENDING;
 
     private int totalPrice;
 }

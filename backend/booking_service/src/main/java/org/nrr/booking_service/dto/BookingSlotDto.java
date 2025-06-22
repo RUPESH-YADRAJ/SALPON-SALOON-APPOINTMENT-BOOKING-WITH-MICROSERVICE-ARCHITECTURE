@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class BookingSlotDTO {
+public class BookingSlotDto {
 
     LocalDateTime startTime;
     LocalDateTime endTime;

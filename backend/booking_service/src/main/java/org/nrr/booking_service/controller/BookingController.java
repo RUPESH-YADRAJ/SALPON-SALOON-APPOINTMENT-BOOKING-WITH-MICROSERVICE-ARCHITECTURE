@@ -27,31 +27,31 @@ public class BookingController {
 
     @PostMapping()
     public ResponseEntity<Booking> createBooking(@RequestParam Long salonId, @RequestBody BookingRequest bookingRequests) throws Exception {
-        UserDTO userDto= UserDTO.builder()
+        UserDto userDto= UserDto.builder()
                 .id(1L)
                 .build();
-        SalonDTO salonDTO=SalonDTO.builder()
+        SalonDto salonDTO= SalonDto.builder()
                 .id(1L)
                 .openTime(LocalTime.now())
                 .closeTime(LocalTime.now().plusHours(12))
                 .build();
 
-        Set<ServiceDTO> serviceDTOSet= new HashSet<>();
-        ServiceDTO serviceDTO=ServiceDTO.builder()
+        Set<ServiceDto> serviceDtoSet = new HashSet<>();
+        ServiceDto serviceDTO= ServiceDto.builder()
                 .id(1L)
                 .price(399)
                 .duration(45)
                 .name("Hair cut for men")
                 .build();
-        serviceDTOSet.add(serviceDTO);
+        serviceDtoSet.add(serviceDTO);
 
 
-        return ResponseEntity.ok(  bookingService.createBooking(bookingRequests,userDto,salonDTO,serviceDTOSet));
+        return ResponseEntity.ok(  bookingService.createBooking(bookingRequests,userDto,salonDTO, serviceDtoSet));
     }
 
     @GetMapping("/customer")
-    public ResponseEntity<Set<BookingDTO>> getBookingByCustomer(){
-        UserDTO userDto= UserDTO.builder()
+    public ResponseEntity<Set<BookingDto>> getBookingByCustomer(){
+        UserDto userDto= UserDto.builder()
                 .id(1L)
                 .build();
 
@@ -60,28 +60,28 @@ public class BookingController {
         return ResponseEntity.ok(getBookingDTOs(bookings));
     }
 
-    private Set<BookingDTO> getBookingDTOs(List<Booking> bookings){
+    private Set<BookingDto> getBookingDTOs(List<Booking> bookings){
         return bookings.stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toSet());
     }
 
     @GetMapping("/salon")
-    public ResponseEntity<Set<BookingDTO>> getBookingBySalon(){
+    public ResponseEntity<Set<BookingDto>> getBookingBySalon(){
         List<Booking> bookings=bookingService.getBookingBySalon(1L);
 
         return ResponseEntity.ok(getBookingDTOs(bookings));
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<BookingDTO> getBookingById(@PathVariable Long bookingId) throws Exception {
+    public ResponseEntity<BookingDto> getBookingById(@PathVariable Long bookingId) throws Exception {
         Booking booking=bookingService.getBookingById(bookingId);
 
         return ResponseEntity.ok(BookingMapper.toBookingDto(booking));
     }
 
     @PutMapping("/{bookingId}/status")
-    public ResponseEntity<BookingDTO> updateBookingStatus(@PathVariable Long bookingId,
+    public ResponseEntity<BookingDto> updateBookingStatus(@PathVariable Long bookingId,
                                                           @RequestParam BookingStatus status) throws Exception {
         Booking booking=bookingService.updateBooking(bookingId,status);
 
@@ -90,17 +90,17 @@ public class BookingController {
 
 
     @GetMapping("/slot/salon/{salonId}/date/{date}")
-    public ResponseEntity<List<BookingSlotDTO>> getBookedSlot(@PathVariable Long salonId, @RequestParam LocalDate date) throws Exception {
+    public ResponseEntity<List<BookingSlotDto>> getBookedSlot(@PathVariable Long salonId, @RequestParam LocalDate date) throws Exception {
         List<Booking> bookings=bookingService.getBookingByDate(date,salonId);
-        List<BookingSlotDTO> bookingSlotDTOS=bookings.stream()
+        List<BookingSlotDto> bookingSlotDtos =bookings.stream()
                 .map(booking->{
-                    return BookingSlotDTO.builder()
+                    return BookingSlotDto.builder()
                             .startTime(booking.getStartTime())
                             .endTime(booking.getEndTime())
                             .build();
                 }).toList();
 
-        return ResponseEntity.ok(bookingSlotDTOS);
+        return ResponseEntity.ok(bookingSlotDtos);
     }
 
 

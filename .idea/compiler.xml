@@ -10,7 +10,9 @@
         <module name="salon_service" />
         <module name="user_service" />
         <module name="category_service" />
+        <module name="payment_service" />
         <module name="booking_service" />
+        <module name="service_offering" />
       </profile>
     </annotationProcessing>
   </component>
@@ -18,7 +20,9 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="booking_service" options="-parameters" />
       <module name="category_service" options="-parameters" />
+      <module name="payment_service" options="-parameters" />
       <module name="salon_service" options="-parameters" />
+      <module name="service_offering" options="-parameters" />
       <module name="user_service" options="-parameters" />
     </option>
   </component>

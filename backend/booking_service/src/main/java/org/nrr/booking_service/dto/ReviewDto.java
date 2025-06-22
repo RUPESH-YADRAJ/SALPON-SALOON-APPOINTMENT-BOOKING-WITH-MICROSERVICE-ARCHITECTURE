@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class ReviewDTO {
+public class ReviewDto {
 
     private Long id;
 
