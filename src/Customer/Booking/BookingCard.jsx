@@ -22,7 +22,7 @@ const BookingCard = () => {
             <div className='space-y-2 flex flex-col items-center md:items-end'>
                 <img className='h-28 w-28 object-cover rounded-md' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcmyWnHW8--eWnOZvh2ScihAajOqZHGhQrkg&s" alt="Service" />
                 <p className='text-center'>Rs. 150</p>
-                <Button color='error' variant="outlined">Cancel</Button>
+                <Button color='error' variant="outlined">Cancelled</Button>
             </div>
         </div>
     )
