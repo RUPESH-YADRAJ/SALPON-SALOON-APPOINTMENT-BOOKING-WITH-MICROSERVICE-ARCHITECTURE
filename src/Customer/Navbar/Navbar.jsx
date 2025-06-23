@@ -1,9 +1,11 @@
 import { AccountCircle, NotificationsActive } from '@mui/icons-material'
 import { Avatar, Badge, Button, IconButton, Menu, MenuItem } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const navigate = useNavigate();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -15,14 +17,14 @@ const Navbar = () => {
     return (
         <div className='z-50 px-6 flex items-center justify-between py-2'>
             <div className='flex items-center gap-10'>
-                <h1 className='cursor-pointer font-bold text-2xl'>Saloon Services</h1>
+                <h1 onClick={() => navigate("/")} className='cursor-pointer font-bold text-2xl'>Saloon Services</h1>
                 <div className='flex items-center gap-5'>
                     <h1>Home</h1>
                 </div>
             </div>
             <div className='flex items-center gap-3 md:gap-6'>
                 <Button variant='outlined'>Become Partner</Button>
-                <IconButton>
+                <IconButton onClick={() => navigate('/notifications')}>
                     <Badge badgeContent={5}>
                         <NotificationsActive color='primary' />
                     </Badge>
@@ -52,8 +54,14 @@ const Navbar = () => {
                                 },
                             }}
                         >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My Booking</MenuItem>
+                            <MenuItem onClick={() => {
+                                navigate("/")
+                                handleClose()
+                            }}>Profile</MenuItem>
+                            <MenuItem onClick={() => {
+                                navigate("/bookings")
+                                handleClose()
+                            }}>My Bookings</MenuItem>
                             <MenuItem onClick={handleClose}>Logout</MenuItem>
                         </Menu>
                     </div>

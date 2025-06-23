@@ -2,7 +2,7 @@ import React from "react";
 import Banner from './Banner';
 import HomeServiceCard from "./HomeServiceCard";
 import { service } from "../../Data/service";
-import SaloonList from "../saloon/SaloonList";
+import SaloonList from "../Saloon/SaloonList";
 const Home = () => {
     return (
         <div className="space-y-20">
