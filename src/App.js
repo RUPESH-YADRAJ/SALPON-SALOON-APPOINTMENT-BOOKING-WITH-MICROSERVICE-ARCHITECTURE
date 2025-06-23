@@ -6,12 +6,15 @@ import Home from './Customer/Home/Home';
 import SaloonDetails from './Customer/saloon/Saloon Details/SaloonDetails';
 import Bookings from './Customer/Booking/Bookings';
 import Notifications from './Customer/Notification/Notifications';
+import Navbar from './Customer/Navbar/Navbar';
 function App() {
   return (
     <ThemeProvider theme={greenTheme}>
+      <Navbar />
+      <Home />
       {/* <SaloonDetails/> */}
       {/* <Bookings /> */}
-      <Notifications />
+      {/* <Notifications /> */}
     </ThemeProvider>
 
   );
