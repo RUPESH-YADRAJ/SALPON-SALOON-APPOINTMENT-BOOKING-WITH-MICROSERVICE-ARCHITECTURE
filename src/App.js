@@ -9,20 +9,16 @@ import Notifications from './Customer/Notification/Notifications';
 import Navbar from './Customer/Navbar/Navbar';
 import { Route, Routes } from 'react-router-dom';
 import SaloonDashboard from './Saloon/SaloonDashboard';
+import CustomerRoutes from './Routes/CustomerRoutes';
 function App() {
   return (
     <ThemeProvider theme={greenTheme}>
-      <Navbar />
-      {/* <Home /> */}
-      {/* <SaloonDetails/> */}
-      {/* <Bookings /> */}
-      {/* <Notifications /> */}
+
+
       <Routes>
         <Route path='/Saloon-dashboard/*' element={<SaloonDashboard />} />
-        <Route path='/' element={<Home />} />
-        <Route path='/notifications' element={<Notifications />} />
-        <Route path='/bookings' element={<Bookings />} />
-        <Route path='/saloon/2' element={<SaloonDetails />} />
+        <Route path='*' element={<CustomerRoutes />} />
+
       </Routes>
     </ThemeProvider>
 
