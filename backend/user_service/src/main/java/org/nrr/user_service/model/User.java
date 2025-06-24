@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.nrr.user_service.domain.UserRole;
 
 import java.time.LocalDateTime;
 
@@ -42,16 +43,13 @@ public class User {
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
     private String password;
 
     @NotBlank(message = "Full name is required")
-    @Size(max = 100, message = "Full name must not exceed 100 characters")
     private String fullName;
 
-    @NotBlank(message = "Role is required")
-    @Pattern(regexp = "^(CUSTOMER|ADMIN|SALON_OWNER)$", message = "Invalid role")
-    private String role;
+    @Column(nullable = false)
+    private UserRole role;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -59,5 +57,4 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Getters and setters (or use Lombok)
 }

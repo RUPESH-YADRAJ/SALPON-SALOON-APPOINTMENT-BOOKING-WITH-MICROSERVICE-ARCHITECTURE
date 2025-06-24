@@ -11,5 +11,6 @@ public interface UserService {
     public User getUserById(Long id);
     public User findUserByEmail(String email);
     public List<User> getAllUsers();
+    User getUserFromJwt(String jwt) throws Exception;
 
 }

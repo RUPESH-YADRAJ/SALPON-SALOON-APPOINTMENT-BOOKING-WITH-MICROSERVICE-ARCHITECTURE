@@ -2,7 +2,9 @@ package org.nrr.user_service.service.impl;
 
 import org.nrr.user_service.exception.UserNotFoundException;
 import org.nrr.user_service.model.User;
+import org.nrr.user_service.payload.dto.KeyCloakUserDto;
 import org.nrr.user_service.repository.UserRepository;
+import org.nrr.user_service.service.KeyCloakService;
 import org.nrr.user_service.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+    private final KeyCloakService keyCloakService;
 
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, KeyCloakService keyCloakService) {
         this.userRepository = userRepository;
+        this.keyCloakService = keyCloakService;
     }
 
     @Override
@@ -104,5 +108,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User getUserFromJwt(String jwt) throws Exception {
+        KeyCloakUserDto userdto=keyCloakService.fetchUserProfileByJwt(jwt);
+        return userRepository.findByEmail(userdto.getEmail());
     }
 }
