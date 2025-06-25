@@ -61,6 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .status(PaymentOrderStatus.PENDING)
                 .salonId(bookingDTO.getSalonId())
                 .build();
+        System.out.println("------------"+userDto.getId()+"------------");
         PaymentOrder savedOrder=paymentOrderRepository.save(order);
 
         PaymentLinkResponse paymentLinkResponse =PaymentLinkResponse.builder().build();
@@ -105,20 +106,23 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentLink createKhaltiPaymentLink(UserDto userDto, long amount, Long orderId) {
 
-        WebClient client=WebClient.builder()
-                .baseUrl("https://a.khalti.com/api/v2/epayment/initiate/")
-                .defaultHeader("Authorization", "KEY " + KHALTI_SECRET_KEY)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+        String url = "https://a.khalti.com/api/v2/epayment/initiate/";
 
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Prepare headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Key " + KHALTI_SECRET_KEY);
+
+        // Prepare request body
         Map<String, Object> request = getStringObjectMap(userDto, amount, orderId);
 
-        PaymentLink paymentLink = client.post()
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(PaymentLink.class)
-                .block();
-        return paymentLink;
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<PaymentLink> response = restTemplate.postForEntity(url, entity, PaymentLink.class);
+
+        return response.getBody();
     }
 
 
@@ -170,7 +174,7 @@ public class PaymentServiceImpl implements PaymentService {
         Map<String, String> customerInfo = new HashMap<>();
         customerInfo.put("name", userDto.getFullName());
         customerInfo.put("email", userDto.getEmail());
-        customerInfo.put("phone", userDto.getPhone());
+        customerInfo.put("phone", userDto.getPhoneNumber());
 
         request.put("customer_info", customerInfo);
         return request;

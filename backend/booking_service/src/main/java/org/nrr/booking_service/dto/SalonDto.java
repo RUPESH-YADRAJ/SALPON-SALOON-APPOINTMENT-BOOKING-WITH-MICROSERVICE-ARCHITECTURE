@@ -20,7 +20,7 @@ public class SalonDto {
         private boolean homeService;
         private boolean active;
         private Long ownerId;
-        private LocalTime openTime;
+        private LocalTime startTime;
         private LocalTime closeTime;
         private List<String> images;
 

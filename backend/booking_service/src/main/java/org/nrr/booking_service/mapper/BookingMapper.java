@@ -13,6 +13,7 @@ public class BookingMapper {
                 .endTime(booking.getEndTime())
                 .startTime(booking.getStartTime())
                 .serviceId(booking.getServiceId())
+                .totalPrice(booking.getTotalPrice())
                 .build();
 
     }

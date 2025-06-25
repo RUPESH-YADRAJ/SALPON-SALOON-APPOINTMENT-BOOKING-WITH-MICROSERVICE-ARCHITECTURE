@@ -5,7 +5,7 @@ import org.nrr.booking_service.dto.SalonDto;
 import org.nrr.booking_service.dto.ServiceDto;
 import org.nrr.booking_service.dto.UserDto;
 import org.nrr.booking_service.model.Booking;
-import org.nrr.booking_service.model.BookingStatus;
+import org.nrr.booking_service.domain.BookingStatus;
 import org.nrr.booking_service.model.SalonReport;
 import org.nrr.booking_service.repository.BookingRepository;
 import org.nrr.booking_service.service.BookingService;
@@ -63,7 +63,7 @@ public class BookingServiceImpl implements BookingService {
 
         List<Booking> existingBookings=getBookingBySalon(salonDTO.getId());
 
-        LocalDateTime salonOpenTime= salonDTO.getOpenTime().atDate(bookingStartTime.toLocalDate());
+        LocalDateTime salonOpenTime= salonDTO.getStartTime().atDate(bookingStartTime.toLocalDate());
         LocalDateTime salonCloseTime= salonDTO.getCloseTime().atDate(bookingEndTime.toLocalDate());
         if(bookingStartTime.isBefore(salonOpenTime) || bookingEndTime.isAfter(salonCloseTime)) {
             throw new Exception("Booking time must be within salon's working hours");

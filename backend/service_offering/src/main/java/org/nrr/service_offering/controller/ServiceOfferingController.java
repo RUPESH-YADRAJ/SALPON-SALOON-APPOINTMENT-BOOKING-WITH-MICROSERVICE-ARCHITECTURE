@@ -12,6 +12,7 @@ public class ServiceOfferingController {
 
     private final ServiceOfferingService serviceOfferingService;
 
+
     public ServiceOfferingController(ServiceOfferingService serviceOfferingService) {
         this.serviceOfferingService = serviceOfferingService;
     }
@@ -20,7 +21,7 @@ public class ServiceOfferingController {
     public ResponseEntity<Set<ServiceOffering>> getServicesBySalonId(@PathVariable Long salonId,
                                                                      @RequestParam(required = false) Long categoryId) {
 
-        Set<ServiceOffering> serviceOfferings =serviceOfferingService.getAllServiceBySalonId(categoryId, salonId);
+        Set<ServiceOffering> serviceOfferings =serviceOfferingService.getAllServiceBySalonId(salonId, categoryId);
         return ResponseEntity.ok(serviceOfferings);
 
     }

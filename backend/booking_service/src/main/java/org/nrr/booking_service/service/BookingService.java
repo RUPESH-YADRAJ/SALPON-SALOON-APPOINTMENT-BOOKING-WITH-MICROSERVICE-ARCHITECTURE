@@ -5,7 +5,7 @@ import org.nrr.booking_service.dto.SalonDto;
 import org.nrr.booking_service.dto.ServiceDto;
 import org.nrr.booking_service.dto.UserDto;
 import org.nrr.booking_service.model.Booking;
-import org.nrr.booking_service.model.BookingStatus;
+import org.nrr.booking_service.domain.BookingStatus;
 import org.nrr.booking_service.model.SalonReport;
 
 import java.time.LocalDate;

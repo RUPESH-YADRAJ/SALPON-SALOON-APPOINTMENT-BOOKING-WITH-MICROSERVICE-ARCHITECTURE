@@ -10,7 +10,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -54,6 +56,10 @@ public class KeyCloakService {
         userRequest.setEnabled(true);
         userRequest.setFirstName(signupDto.getFullName());
         userRequest.getCredentials().add(credential);
+
+        Map<String, List<String>> attributes = new HashMap<>();
+        attributes.put("phoneNumber", List.of(signupDto.getPhoneNumber()));
+        userRequest.setAttributes(attributes);
 
         HttpHeaders httpHeaders=new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);

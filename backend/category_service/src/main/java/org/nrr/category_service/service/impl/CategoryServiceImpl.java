@@ -32,7 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Set<Category> getAllCategoriesBySalonId(Long salonId) {
+        System.out.println(categoryRepository.findBySalonId(salonId));
         return categoryRepository.findBySalonId(salonId);
+
     }
 
     @Override
@@ -51,5 +53,14 @@ public class CategoryServiceImpl implements CategoryService {
             throw new Exception("you don't have permission to delete this category ");
         }
         categoryRepository.delete(category);
+    }
+
+    @Override
+    public Category findByIdAndSalonId(Long id, Long salonId) throws Exception {
+        Category category= categoryRepository.findByIdAndSalonId(id,salonId);
+        if (category == null) {
+            throw new Exception("Category not found");
+        }
+        return category;
     }
 }

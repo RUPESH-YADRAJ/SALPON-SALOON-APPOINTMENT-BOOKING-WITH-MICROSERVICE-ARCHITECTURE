@@ -189,7 +189,7 @@ services:
       paymentdb:
         condition: service_healthy
     environment:
-      KHALTI_SECRET_KEY: your key
+      KHALTI_SECRET_KEY: your api key
       SPRING_APPLICATION_NAME: "PAYMENT-SERVICE"
       SPRING_DATASOURCE_URL: "jdbc:mysql://paymentdb:3306/paymentdb"
       SPRING_DATASOURCE_USERNAME: root

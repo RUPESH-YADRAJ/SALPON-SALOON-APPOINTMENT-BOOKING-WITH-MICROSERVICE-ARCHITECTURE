@@ -48,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(req.getPassword());
         user.setEmail(req.getEmail());
         user.setRole(req.getRole());
+        user.setPhoneNumber(req.getPhoneNumber());
         user.setFullName(req.getFullName());
         user.setCreatedAt(LocalDateTime.now());
 

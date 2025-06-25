@@ -9,7 +9,8 @@ import java.util.Set;
 public class BookingRequest {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Set<Long> serviceId;
+    private Set<Long> serviceIds;
+    private String status;
 
 
 }

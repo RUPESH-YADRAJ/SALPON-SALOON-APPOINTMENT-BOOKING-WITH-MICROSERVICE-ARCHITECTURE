@@ -2,6 +2,7 @@ package org.nrr.booking_service.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.nrr.booking_service.domain.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.Set;
