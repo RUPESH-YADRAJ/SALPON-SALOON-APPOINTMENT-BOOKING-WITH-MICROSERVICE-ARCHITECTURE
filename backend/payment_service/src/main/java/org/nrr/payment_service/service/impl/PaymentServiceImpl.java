@@ -2,6 +2,8 @@ package org.nrr.payment_service.service.impl;
 
 import org.nrr.payment_service.domain.PaymentMethod;
 import org.nrr.payment_service.domain.PaymentOrderStatus;
+import org.nrr.payment_service.messaging.BookingEventProducer;
+import org.nrr.payment_service.messaging.NotificationEventProducer;
 import org.nrr.payment_service.model.PaymentOrder;
 import org.nrr.payment_service.payload.dto.BookingDto;
 import org.nrr.payment_service.payload.dto.PaymentLink;
@@ -9,6 +11,7 @@ import org.nrr.payment_service.payload.dto.UserDto;
 import org.nrr.payment_service.payload.response.PaymentLinkResponse;
 import org.nrr.payment_service.repository.PaymentOrderRepository;
 import org.nrr.payment_service.service.PaymentService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +36,8 @@ import java.util.Map;
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentOrderRepository paymentOrderRepository;
+    private final BookingEventProducer bookingEventProducer;
+    private final NotificationEventProducer notificationEventProducer;
 
     @Value("${khalti.secret-key}")
     private String KHALTI_SECRET_KEY;
@@ -42,8 +47,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 
-    public PaymentServiceImpl(PaymentOrderRepository paymentOrderRepository) {
+    public PaymentServiceImpl(PaymentOrderRepository paymentOrderRepository,  BookingEventProducer bookingEventProducer, NotificationEventProducer notificationEventProducer) {
         this.paymentOrderRepository = paymentOrderRepository;
+        this.bookingEventProducer = bookingEventProducer;
+        this.notificationEventProducer = notificationEventProducer;
     }
 
     @Override
@@ -135,28 +142,46 @@ public class PaymentServiceImpl implements PaymentService {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://a.khalti.com/api/v2/epayment/lookup/"))
-                    .header("Authorization", KHALTI_SECRET_KEY)
+                    .header("Authorization","key "+ KHALTI_SECRET_KEY)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"pidx\":\"" + paymentLinkId + "\"}"))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-
             JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
             String status = jsonResponse.has("status") ? jsonResponse.get("status").getAsString() : "";
 
-            if ("Completed".equalsIgnoreCase(status)) {
-                paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
-                return true;
-            } else {
-                paymentOrder.setStatus(PaymentOrderStatus.FAILED);
-                return false;
+            switch (status.toLowerCase()) {
+                case "completed":
+                case "confirmed":
+                    bookingEventProducer.sentBookingUpdateEvent(paymentOrder);
+                    notificationEventProducer.sentNotification(paymentOrder.getBookingId(),
+                            paymentOrder.getUserId(),
+                            paymentOrder.getSalonId());
+                    paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                    paymentOrderRepository.save(paymentOrder);
+                    return true;
+
+                case "pending":
+                    // Optional: Set as intermediate state
+                    paymentOrder.setStatus(PaymentOrderStatus.PENDING);
+                    paymentOrderRepository.save(paymentOrder);
+                    return false;
+
+                case "initiated":
+                case "refunded":
+                case "expired":
+                case "cancelled":
+                case "failed":
+                default:
+                    paymentOrder.setStatus(PaymentOrderStatus.FAILED);
+                    paymentOrderRepository.save(paymentOrder);
+                    return false;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            paymentOrder.setStatus(PaymentOrderStatus.FAILED);
             return false;
         }
     }

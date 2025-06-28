@@ -6,7 +6,9 @@
     <file url="file://$PROJECT_DIR$/backend/category_service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/eureka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/gateway-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/notification/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/payment_service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/review/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/salon_service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/service_offering/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/user_service/src/main/java" charset="UTF-8" />

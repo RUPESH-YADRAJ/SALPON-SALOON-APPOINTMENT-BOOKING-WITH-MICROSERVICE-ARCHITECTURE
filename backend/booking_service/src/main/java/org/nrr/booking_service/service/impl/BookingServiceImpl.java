@@ -6,6 +6,7 @@ import org.nrr.booking_service.dto.ServiceDto;
 import org.nrr.booking_service.dto.UserDto;
 import org.nrr.booking_service.model.Booking;
 import org.nrr.booking_service.domain.BookingStatus;
+import org.nrr.booking_service.model.PaymentOrder;
 import org.nrr.booking_service.model.SalonReport;
 import org.nrr.booking_service.repository.BookingRepository;
 import org.nrr.booking_service.service.BookingService;
@@ -150,5 +151,12 @@ public class BookingServiceImpl implements BookingService {
                 .totalEarning(totalEarning)
                 .totalRefund(totalRefund)
                 .build();
+    }
+
+    @Override
+    public Booking bookingSuccess(PaymentOrder paymentOrder) throws Exception {
+        Booking existingBooking=getBookingById(paymentOrder.getBookingId());
+        existingBooking.setBookingStatus(BookingStatus.CONFIRMED);
+        return bookingRepository.save(existingBooking);
     }
 }

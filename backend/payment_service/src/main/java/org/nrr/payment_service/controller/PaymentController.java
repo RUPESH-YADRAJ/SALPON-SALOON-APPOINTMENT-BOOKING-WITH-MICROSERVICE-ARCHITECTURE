@@ -44,13 +44,28 @@ public class PaymentController {
     }
 
 
-    @GetMapping("{paymentOrderId}")
+    @GetMapping("/{paymentOrderId}")
     public ResponseEntity<PaymentOrder> getPaymentOrderById(
             @PathVariable Long paymentOrderId
     ) throws Exception {
         PaymentOrder res=paymentService.getPaymentOrderById(paymentOrderId);
         return ResponseEntity.ok(res);
     }
+
+    @PatchMapping("/proceed")
+    public ResponseEntity<Boolean> proceedPayment(
+            @RequestParam String paymentId,
+            @RequestParam String paymentLinkId) throws Exception {
+
+        PaymentOrder paymentOrder = paymentService.
+                getPaymentOrderByPaymentId(paymentLinkId);
+        Boolean success = paymentService.proceedPayment(
+                paymentOrder,
+                paymentId, paymentLinkId);
+        return ResponseEntity.ok(success);
+
+    }
+
 
 
 }
