@@ -67,9 +67,9 @@ const menu2 = [
         activeIcon: <Logout className='text-secondary-color' />
     },
 ]
-const SaloonDrawerList = () => {
+const SaloonDrawerList = ({ toggleDrawer }) => {
     return (
-        <DrawerList menu={menu} menu2={menu2} />
+        <DrawerList menu={menu} menu2={menu2} toggleDrawer={toggleDrawer} />
     )
 }
 

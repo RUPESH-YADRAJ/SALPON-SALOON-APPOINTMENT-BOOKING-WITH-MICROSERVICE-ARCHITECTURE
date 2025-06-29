@@ -23,7 +23,7 @@ const Navbar = ({ DrawerList }) => {
                 </Badge>
             </IconButton>
             <Drawer open={open} onClose={toggleDrawer(false)} >
-                <DrawerList />
+                <DrawerList toggleDrawer={toggleDrawer} />
             </Drawer>
         </div>
     )

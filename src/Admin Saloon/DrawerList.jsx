@@ -2,12 +2,15 @@ import { Divider, ListItemIcon, ListItemText } from '@mui/material'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-const DrawerList = ({ menu, menu2 }) => {
+const DrawerList = ({ menu, menu2, toggleDrawer }) => {
     const navigate = useNavigate()
     const location = useLocation();
 
     const handleClick = (item) => () => {
         navigate(item.path)
+        if (toggleDrawer) {
+            toggleDrawer(false)();
+        }
 
     };
 
