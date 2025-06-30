@@ -1,4 +1,6 @@
 import React from 'react'
+import ProfileFildCard from './ProfileFildCard'
+import { Divider } from '@mui/material'
 
 const Profile = () => {
     return (
@@ -16,6 +18,34 @@ const Profile = () => {
                         <img className='w-full rounded-md h-[15rem] object-cover' src="https://cdn.pixabay.com/photo/2018/02/22/17/08/barber-3173419_1280.jpg" alt="" />
                     </div>
                 </section>
+            </div>
+            <div className='mt-10 lg:w-[70%]'>
+                <div className='flex items-center pb-3 justify-between'>
+                    <h1 className='text-2xl font-bold text-gray-600 '>Owner Details</h1>
+                </div>
+                <div>
+                    <ProfileFildCard keys={"Owner Name"} value={"Pablo"} />
+                    <Divider />
+                    <ProfileFildCard keys={"Email"} value={"pablo@gmail.com"} />
+                    <Divider />
+                    <ProfileFildCard keys={"Role"} value={"Saloon_Owner"} />
+
+                </div>
+            </div>
+
+            <div className='mt-10 lg:w-[70%]'>
+                <div className='flex items-center pb-3 justify-between'>
+                    <h1 className='text-2xl font-bold text-gray-600 '>Saloon Details</h1>
+                </div>
+                <div>
+                    <ProfileFildCard keys={"Saloon Name"} value={"Pablo Saloon"} />
+                    <Divider />
+                    <ProfileFildCard keys={"Saloon Address"} value={"Koteswor, Kathmandu"} />
+                    <Divider />
+                    <ProfileFildCard keys={"Open Time"} value={"10:00AM"} />
+                    <Divider />
+                    <ProfileFildCard keys={"Close Time"} value={"09:00PM"} />
+                </div>
             </div>
         </div>
     )
