@@ -8,6 +8,7 @@ import BookingTables from '../Saloon/Booking/BookingTable'
 import TransactionTable from '../Saloon/Transaction/TransactionTable'
 import Payment from '../Saloon/Payment/Payment'
 import Category from '../Saloon/Category/Category'
+import Profile from '../Saloon/Profile/Profile'
 
 
 const SaloonRoutes = () => {
@@ -21,6 +22,7 @@ const SaloonRoutes = () => {
             <Route path='/transaction' element={<TransactionTable />} />
             <Route path='/notifications' element={<Notifications />} />
             <Route path='/payment' element={<Payment />} />
+            <Route path='/account' element={<Profile />} />
         </Routes>
     )
 }
