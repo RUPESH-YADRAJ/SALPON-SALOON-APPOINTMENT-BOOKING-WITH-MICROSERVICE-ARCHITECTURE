@@ -42,9 +42,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${khalti.secret-key}")
     private String KHALTI_SECRET_KEY;
 
-    @Value("${stripe.api.key}")
-    private String STRIPE_SECRET_KEY;
-
 
 
     public PaymentServiceImpl(PaymentOrderRepository paymentOrderRepository,  BookingEventProducer bookingEventProducer, NotificationEventProducer notificationEventProducer) {

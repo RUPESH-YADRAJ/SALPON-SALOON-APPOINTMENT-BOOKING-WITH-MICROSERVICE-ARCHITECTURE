@@ -1,10 +1,8 @@
 package org.nrr.review.controller;
 
+import org.nrr.review.mapper.ReviewMapper;
 import org.nrr.review.model.Review;
-import org.nrr.review.payload.dto.ApiResponse;
-import org.nrr.review.payload.dto.ReviewRequest;
-import org.nrr.review.payload.dto.SalonDto;
-import org.nrr.review.payload.dto.UserDto;
+import org.nrr.review.payload.dto.*;
 import org.nrr.review.services.ReviewService;
 import org.nrr.review.services.clients.SalonFeignClient;
 import org.nrr.review.services.clients.UserFeignClient;
@@ -27,22 +25,34 @@ public class ReviewController {
     }
 
     @PostMapping("/salon/{salonId}")
-    public ResponseEntity<List<Review>> createReview(@PathVariable Long salonId,
+    public ResponseEntity<Review> createReview(@PathVariable Long salonId,
+                                               @RequestBody ReviewRequest reviewRequest,
                                                @RequestHeader("Authorization") String jwt) throws Exception {
         UserDto user= userFeignClient.getUserFromJwtToken(jwt).getBody();
         SalonDto salon=salonFeignClient.getSalonById(salonId).getBody();
-        List<Review> review=reviewService.getReviewsBySalonId(salon.getId());
+        Review review=reviewService.createReview(reviewRequest,user,salon);
+
         return ResponseEntity.ok(review);
     }
 
 
     @GetMapping("/salon/{salonId}")
-    public ResponseEntity<List<Review>> getReviewsBySalonId(@PathVariable Long salonId,
+    public ResponseEntity<List<ReviewDTO>> getReviewsBySalonId(@PathVariable Long salonId,
                                                @RequestHeader("Authorization") String jwt) throws Exception {
-        UserDto user= userFeignClient.getUserFromJwtToken(jwt).getBody();
         SalonDto salon=salonFeignClient.getSalonById(salonId).getBody();
-        List<Review> review=reviewService.getReviewsBySalonId(salon.getId());
-        return ResponseEntity.ok(review);
+        List<Review> reviews=reviewService.getReviewsBySalonId(salon.getId());
+        List<ReviewDTO> reviewDTOS=reviews.stream().map((review)->{
+            UserDto user;
+                    try{
+                        user= userFeignClient.getUserById(review.getUserId()).getBody();
+                    }catch (Exception e){
+
+                        throw new RuntimeException(e);
+                    }
+                    return ReviewMapper.toDTO(review,user);
+        }).toList();
+
+        return ResponseEntity.ok(reviewDTOS);
     }
 
     @PutMapping("/{reviewId}")

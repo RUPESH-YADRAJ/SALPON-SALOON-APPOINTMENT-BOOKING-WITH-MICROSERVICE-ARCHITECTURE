@@ -8,6 +8,7 @@ import org.nrr.review.repository.ReviewRepository;
 import org.nrr.review.services.ReviewService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,8 +27,9 @@ public class ReviewServiceImpl implements ReviewService {
         review.setRating(reviewRequest.getRating());
         review.setUserId(userDto.getId());
         review.setSalonId(salonDto.getId());
-        reviewRepository.save(review);
-        return null;
+        review.setCreatedAt(LocalDateTime.now());
+        return reviewRepository.save(review);
+
     }
 
     @Override

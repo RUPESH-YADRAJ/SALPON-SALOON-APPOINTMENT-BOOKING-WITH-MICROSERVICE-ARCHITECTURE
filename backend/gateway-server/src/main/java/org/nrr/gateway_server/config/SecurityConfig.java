@@ -55,8 +55,8 @@ public class SecurityConfig {
 
         CorsConfiguration configuration=new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000/register",
-                "http://localhost:5170/register"
+                "http://localhost:3000",
+                "http://localhost:5170"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
