@@ -50,7 +50,13 @@ public class BookingController {
 
         Booking booking=bookingService.createBooking(bookingRequests,userDto,salonDTO, serviceDto);
 
-        BookingDto bookingDto=BookingMapper.toBookingDto(booking);
+        Set<ServiceDto> services =serviceOfferingFeignClient.getServicesByIds(booking.getServiceId()).getBody();
+        UserDto customer=userFeignClient.getUserById(booking.getCustomerId()).getBody();
+       // SalonDto salon=salonFeignClient.getSalonById(booking.getSalonId()).getBody();
+        BookingDto bookingDto=BookingMapper.toBookingDto(booking,services,customer,salonDTO);
+        System.out.println(booking);
+
+
 
         paymentFeignClient.createPaymentLink(bookingDto,paymentMethod,jwt);
 
@@ -71,9 +77,24 @@ public class BookingController {
         return ResponseEntity.ok(getBookingDTOs(bookings));
     }
 
-    private Set<BookingDto> getBookingDTOs(List<Booking> bookings){
+    private Set<BookingDto> getBookingDTOs(List<Booking> bookings) throws Exception{
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(booking -> {
+                    SalonDto salon;
+                    UserDto user;
+                    Set<ServiceDto> services;
+
+                    try {
+                         services =serviceOfferingFeignClient.getServicesByIds(booking.getServiceId()).getBody();
+                         salon=salonFeignClient.getSalonById(booking.getSalonId()).getBody();
+                         user=userFeignClient.getUserById(booking.getCustomerId()).getBody();
+
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    return BookingMapper.toBookingDto(booking,services,user,salon);
+                })
                 .collect(Collectors.toSet());
     }
 
@@ -93,9 +114,12 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     public ResponseEntity<BookingDto> getBookingById(@PathVariable Long bookingId) throws Exception {
         Booking booking=bookingService.getBookingById(bookingId);
+        Set<ServiceDto> services =serviceOfferingFeignClient.getServicesByIds(booking.getServiceId()).getBody();
+        UserDto customer=userFeignClient.getUserById(booking.getCustomerId()).getBody();
+        SalonDto salon=salonFeignClient.getSalonById(booking.getSalonId()).getBody();
         System.out.println(booking);
 
-        return ResponseEntity.ok(BookingMapper.toBookingDto(booking));
+        return ResponseEntity.ok(BookingMapper.toBookingDto(booking,services,customer,salon));
     }
 
     @PutMapping("/{bookingId}/status")
@@ -103,7 +127,12 @@ public class BookingController {
                                                           @RequestParam BookingStatus status) throws Exception {
         Booking booking=bookingService.updateBooking(bookingId,status);
 
-        return ResponseEntity.ok(BookingMapper.toBookingDto(booking));
+        Set<ServiceDto> services =serviceOfferingFeignClient.getServicesByIds(booking.getServiceId()).getBody();
+        UserDto customer=userFeignClient.getUserById(booking.getCustomerId()).getBody();
+        SalonDto salon=salonFeignClient.getSalonById(booking.getSalonId()).getBody();
+        System.out.println(booking);
+
+        return ResponseEntity.ok(BookingMapper.toBookingDto(booking,services,customer,salon));
     }
 
 

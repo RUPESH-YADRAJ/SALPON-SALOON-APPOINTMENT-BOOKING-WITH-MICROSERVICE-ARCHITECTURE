@@ -33,4 +33,5 @@ public class Booking {
     private BookingStatus bookingStatus=BookingStatus.PENDING;
 
     private int totalPrice;
+
 }

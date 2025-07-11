@@ -17,10 +17,12 @@ public class NotificationImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final BookingFeignClient bookingFeignClient;
+    private final RealTimeCommunicationService realTimeCommunicationService;
 
-    public NotificationImpl(NotificationRepository notificationRepository, BookingFeignClient bookingFeignClient) {
+    public NotificationImpl(NotificationRepository notificationRepository, BookingFeignClient bookingFeignClient, RealTimeCommunicationService realTimeCommunicationService) {
         this.notificationRepository = notificationRepository;
         this.bookingFeignClient = bookingFeignClient;
+        this.realTimeCommunicationService = realTimeCommunicationService;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class NotificationImpl implements NotificationService {
                 savedNotification.getBookingId()
         ).getBody();
         NotificationDto notificationDto= NotificationMapper.toDto(savedNotification,bookingDto);
-
+        realTimeCommunicationService.sendNotification(notificationDto);
         return notificationDto;
     }
 

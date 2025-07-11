@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category newCategory = Category.builder()
                 .name(category.getName())
                 .salonId(salonDto.getId())
-                .images(category.getImages())
+                .image(category.getImage())
                 .build();
 
         return categoryRepository.save(newCategory);

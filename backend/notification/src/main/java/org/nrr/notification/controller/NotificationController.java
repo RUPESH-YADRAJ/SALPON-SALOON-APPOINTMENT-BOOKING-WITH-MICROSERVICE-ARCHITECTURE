@@ -54,4 +54,5 @@ public class NotificationController {
         return ResponseEntity.ok(NotificationMapper.toDto(notification,bookingDto));
     }
 
+
 }

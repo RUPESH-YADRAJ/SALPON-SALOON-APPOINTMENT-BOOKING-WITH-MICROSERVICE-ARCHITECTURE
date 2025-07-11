@@ -8,16 +8,31 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gateway-server" />
+        <module name="notification" />
+        <module name="eureka" />
       </profile>
-      <profile name="Annotation profile for review" enabled="true">
+      <profile name="Annotation profile for service_offering" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="salon_service" />
+        <module name="payment_service" />
+        <module name="category_service" />
+        <module name="service_offering" />
         <module name="review" />
+        <module name="booking_service" />
+      </profile>
+      <profile name="Annotation profile for user_service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+        </processorPath>
+        <module name="salon_service" />
         <module name="user_service" />
       </profile>
     </annotationProcessing>

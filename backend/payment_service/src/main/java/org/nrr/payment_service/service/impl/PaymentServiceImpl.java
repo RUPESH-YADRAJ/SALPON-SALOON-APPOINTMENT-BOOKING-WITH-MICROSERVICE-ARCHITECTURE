@@ -186,8 +186,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static Map<String, Object> getStringObjectMap(UserDto userDto, long amount, Long orderId) {
         Map<String, Object> request = new HashMap<>();
-        request.put("return_url", "https://localhost:3000/payment-success/"+orderId);
-        request.put("website_url", "https://localhost:5006/");
+        request.put("return_url", "http://localhost:3000/payment-success/"+orderId);
+        request.put("website_url", "http://localhost:5006/");
         request.put("amount", amount * 100);
         request.put("purchase_order_id", orderId);
         request.put("currency", "NPR");

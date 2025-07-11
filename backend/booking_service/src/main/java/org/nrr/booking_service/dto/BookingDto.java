@@ -5,6 +5,7 @@ import lombok.Data;
 import org.nrr.booking_service.domain.BookingStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -25,4 +26,9 @@ public class BookingDto {
     private BookingStatus bookingStatus=BookingStatus.PENDING;
 
     private int totalPrice;
+
+    private Set<ServiceDto> services;
+
+    private UserDto user;
+    private SalonDto salon;
 }
