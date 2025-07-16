@@ -70,6 +70,16 @@ public class SalonController {
         return ResponseEntity.ok(SalonMapper.toSalonDto(salon));
     }
 
+    @GetMapping("/{id}/seats")
+    public ResponseEntity<List<SeatDto>> getAllSeats(@RequestHeader("Authorization") String jwt,@PathVariable Long id) throws Exception {
+        UserDto userDto = userFeignClient.getUserFromJwtToken(jwt).getBody();
+        if (userDto==null){
+            throw new Exception("user not found from jwt");
+        }
+        List<SeatDto> seatDtos=salonService.getAllSeatsOfSalon(id);
+        return ResponseEntity.ok(seatDtos);
+    }
+
 
 
 }

@@ -30,6 +30,9 @@ public class Salon {
     @Column(nullable = false)
     private String address;
 
+    @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seat> seats;
+
     @Column(nullable = false)
     private String phoneNumber;
 

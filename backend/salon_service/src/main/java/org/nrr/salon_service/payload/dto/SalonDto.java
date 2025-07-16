@@ -13,6 +13,8 @@ public class SalonDto {
 
     private Long id;
 
+    private int seatCounts;
+
 
     private String name;
 

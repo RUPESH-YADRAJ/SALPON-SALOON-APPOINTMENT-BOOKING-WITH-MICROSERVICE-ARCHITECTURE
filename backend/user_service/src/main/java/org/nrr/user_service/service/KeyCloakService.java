@@ -3,6 +3,7 @@ package org.nrr.user_service.service;
 import lombok.RequiredArgsConstructor;
 import org.nrr.user_service.payload.dto.*;
 import org.nrr.user_service.payload.resopnse.TokenResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -25,12 +26,14 @@ public class KeyCloakService {
     private static final String KEYCLOAK_ADMIN_API=KEYCLOAK_BASE_URL +"/admin/realms/master/users";
     private static final String TOKEN_URL=KEYCLOAK_BASE_URL + "/realms/master/protocol/openid-connect/token";
     private static final String CLIENT_ID="salon-booking-client";
-    private static final String CLIENT_SECRET="mn7YkTIJKtlD0Q7N92AWY4GAY5Lqgq0E";
+    @Value("${client.secret.n}")
+    private String CLIENT_SECRET;
     private static final String GRANT_TYPE="password";
     private static final String scope="openid email profile";
     private static final String username="nishan";
     private static final String password="1234";
-    private static final String clientId="c6ce409b-c8f5-46e2-a606-327d3b1e93c7";
+    @Value("${client.id.n}")
+    private String clientId;
 
     private final RestTemplate restTemplate;
 
