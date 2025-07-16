@@ -19,6 +19,7 @@ public class SalonDto {
         private boolean isOpen;
         private boolean homeService;
         private boolean active;
+        private int seatCounts;
         private Long ownerId;
         private LocalTime startTime;
         private LocalTime closeTime;

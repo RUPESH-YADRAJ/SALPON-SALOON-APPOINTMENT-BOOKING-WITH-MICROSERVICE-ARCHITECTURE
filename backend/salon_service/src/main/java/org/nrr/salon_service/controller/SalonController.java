@@ -4,6 +4,7 @@ package org.nrr.salon_service.controller;
 import org.nrr.salon_service.mapper.SalonMapper;
 import org.nrr.salon_service.models.Salon;
 import org.nrr.salon_service.payload.dto.SalonDto;
+import org.nrr.salon_service.payload.dto.SeatDto;
 import org.nrr.salon_service.payload.dto.UserDto;
 import org.nrr.salon_service.service.SalonService;
 import org.nrr.salon_service.service.client.UserFeignClient;
@@ -70,13 +71,13 @@ public class SalonController {
         return ResponseEntity.ok(SalonMapper.toSalonDto(salon));
     }
 
-    @GetMapping("/{id}/seats")
-    public ResponseEntity<List<SeatDto>> getAllSeats(@RequestHeader("Authorization") String jwt,@PathVariable Long id) throws Exception {
+    @GetMapping("/{salonId}/seats")
+    public ResponseEntity<List<SeatDto>> getAllSeats(@RequestHeader("Authorization") String jwt, @PathVariable Long salonId) throws Exception {
         UserDto userDto = userFeignClient.getUserFromJwtToken(jwt).getBody();
         if (userDto==null){
             throw new Exception("user not found from jwt");
         }
-        List<SeatDto> seatDtos=salonService.getAllSeatsOfSalon(id);
+        List<SeatDto> seatDtos=salonService.getAllSeatsOfSalon(salonId);
         return ResponseEntity.ok(seatDtos);
     }
 

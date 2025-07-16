@@ -12,6 +12,7 @@ public class SalonMapper {
                 .city(salon.getCity())
                 .images(salon.getImages())
                 .email(salon.getEmail())
+                .seatCounts(salon.getSeats().size())
                 .phoneNumber(salon.getPhoneNumber())
                 .startTime(salon.getStartTime())
                 .closeTime(salon.getCloseTime())

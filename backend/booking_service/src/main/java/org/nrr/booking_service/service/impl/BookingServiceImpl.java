@@ -1,9 +1,6 @@
 package org.nrr.booking_service.service.impl;
 
-import org.nrr.booking_service.dto.BookingRequest;
-import org.nrr.booking_service.dto.SalonDto;
-import org.nrr.booking_service.dto.ServiceDto;
-import org.nrr.booking_service.dto.UserDto;
+import org.nrr.booking_service.dto.*;
 import org.nrr.booking_service.model.Booking;
 import org.nrr.booking_service.domain.BookingStatus;
 import org.nrr.booking_service.model.PaymentOrder;
@@ -14,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,31 +32,94 @@ public class BookingServiceImpl implements BookingService {
                                  UserDto userDTO,
                                  SalonDto salonDTO,
                                  Set<ServiceDto> serviceDtoSet) throws Exception {
-        int totalDuration= serviceDtoSet.stream()
-                .mapToInt(ServiceDto::getDuration)
-                .sum();
-        LocalDateTime bookingStartTime=bookingRequest.getStartTime();
-        LocalDateTime bookingEndTime=bookingStartTime.plusMinutes(totalDuration);
 
-        Boolean isAvailable=isTimeSlotAvailable(salonDTO,bookingStartTime,bookingEndTime);
-        int totalPrice= serviceDtoSet.stream()
-                .mapToInt(ServiceDto::getPrice)
-                .sum();
-        Set<Long> idList= serviceDtoSet.stream()
-                .map(ServiceDto::getId)
-                .collect(Collectors.toSet());
+        LocalDateTime startTime = bookingRequest.getStartTime();
+        if (startTime.isBefore(LocalDateTime.now())) {
+            throw new Exception("Cannot book an appointment in the past.");
+        }
 
-        Booking newBooking=Booking.builder()
+        int duration = serviceDtoSet.stream().mapToInt(ServiceDto::getDuration).sum();
+        LocalDateTime endTime = startTime.plusMinutes(duration);
+
+        validateTimeWithinSalonHours(salonDTO, startTime, endTime);
+
+        Set<Long> bookedSeatIds = bookingRepository.findBookedSeatIds(salonDTO.getId(), startTime, endTime);
+        Set<Long> requestedSeatIds = bookingRequest.getSeatIds();
+
+        for (Long seatId : requestedSeatIds) {
+            if (bookedSeatIds.contains(seatId)) {
+                throw new Exception("Seat " + seatId + " is already booked at this time");
+            }
+        }
+
+        int totalPrice = serviceDtoSet.stream().mapToInt(ServiceDto::getPrice).sum();
+        Set<Long> serviceIds = serviceDtoSet.stream().map(ServiceDto::getId).collect(Collectors.toSet());
+
+        Booking booking = Booking.builder()
                 .customerId(userDTO.getId())
                 .salonId(salonDTO.getId())
-                .serviceId(idList)
+                .serviceId(serviceIds)
                 .bookingStatus(BookingStatus.PENDING)
-                .startTime(bookingStartTime)
-                .endTime(bookingEndTime)
+                .startTime(startTime)
+                .endTime(endTime)
                 .totalPrice(totalPrice)
+                .seatIds(requestedSeatIds)
                 .build();
-        return bookingRepository.save(newBooking);
+
+        return bookingRepository.save(booking);
     }
+
+    private void validateTimeWithinSalonHours(SalonDto salonDTO,
+                                              LocalDateTime start,
+                                              LocalDateTime end) throws Exception {
+        LocalTime open = salonDTO.getStartTime();
+        LocalTime close = salonDTO.getCloseTime();
+
+        if (start.toLocalTime().isBefore(open) || end.toLocalTime().isAfter(close)) {
+            throw new Exception("Booking must be within salon working hours.");
+        }
+    }
+
+
+    @Override
+    public AvailableSeatsResponse getAvailableSeats(SalonDto salonDto,
+                                                    LocalDateTime startTime,
+                                                    Set<ServiceDto> services,
+                                                    List<SeatDto> allSeats) {
+
+        int totalDuration = services.stream().mapToInt(ServiceDto::getDuration).sum();
+        LocalDateTime endTime = startTime.plusMinutes(totalDuration);
+
+        // 1. Fetch bookings overlapping with the requested time
+        List<Booking> overlappingBookings = bookingRepository.findBySalonIdAndTimeRange(
+                salonDto.getId(), startTime, endTime
+        );
+
+        // 2. Collect booked seat info
+        List<BookedSeatInfo> bookedSeatInfos = new ArrayList<>();
+        Set<Long> bookedSeatIds = new HashSet<>();
+
+        for (Booking booking : overlappingBookings) {
+            for (Long seatId : booking.getSeatIds()) {
+                bookedSeatIds.add(seatId);
+                bookedSeatInfos.add(new BookedSeatInfo(seatId, booking.getStartTime(), booking.getEndTime()));
+            }
+        }
+
+        // 3. All available seats
+        Set<Long> allSeatIds = allSeats.stream().map(SeatDto::getId).collect(Collectors.toSet());
+        Set<Long> availableSeatIds = allSeatIds.stream()
+                .filter(id -> !bookedSeatIds.contains(id))
+                .collect(Collectors.toSet());
+
+        // 4. Return response
+        AvailableSeatsResponse response = new AvailableSeatsResponse();
+        response.setAvailableSeatIds(availableSeatIds);
+        response.setBookedSeats(bookedSeatInfos);
+        return response;
+
+    }
+
 
     public Boolean isTimeSlotAvailable(SalonDto salonDTO,
                                        LocalDateTime bookingStartTime,

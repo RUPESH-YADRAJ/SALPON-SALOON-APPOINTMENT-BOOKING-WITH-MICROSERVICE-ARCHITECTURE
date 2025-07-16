@@ -21,6 +21,11 @@ public class Booking {
 
     private Long salonId;
 
+    @ElementCollection
+    @CollectionTable(name = "booking_seats", joinColumns = @JoinColumn(name = "booking_id"))
+    @Column(name = "seat_id")
+    private Set<Long> seatIds;
+
     private Long customerId;
 
     private LocalDateTime startTime;

@@ -1,17 +1,17 @@
 package org.nrr.booking_service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+
 
 @Data
-public class BookingRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class BookedSeatInfo {
+    private Long seatId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Set<Long> serviceIds;
-    private String status;
-    private Set<Long> seatIds;
-
-
 }

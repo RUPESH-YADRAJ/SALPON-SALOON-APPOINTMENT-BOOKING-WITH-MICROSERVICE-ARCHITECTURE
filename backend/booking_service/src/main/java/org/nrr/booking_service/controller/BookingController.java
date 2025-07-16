@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,7 @@ public class BookingController {
     public ResponseEntity<PaymentLinkResponse> createBooking(@RequestParam Long salonId, @RequestParam PaymentMethod paymentMethod, @RequestBody BookingRequest bookingRequests, @RequestHeader("Authorization") String jwt) throws Exception {
         UserDto userDto= userFeignClient.getUserFromJwtToken(jwt).getBody();
         SalonDto salonDTO=salonFeignClient.getSalonById(salonId).getBody();
-
+        System.out.println(salonDTO.getSeatCounts());
         Set<ServiceDto> serviceDto= serviceOfferingFeignClient.getServicesByIds(bookingRequests.getServiceIds()).getBody();
 
         Booking booking=bookingService.createBooking(bookingRequests,userDto,salonDTO, serviceDto);
@@ -64,6 +65,8 @@ public class BookingController {
         return ResponseEntity.ok(paymentFeignClient.createPaymentLink(bookingDto,paymentMethod,jwt).getBody());
 
     }
+
+
 
     @GetMapping("/customer")
     public ResponseEntity<Set<BookingDto>> getBookingByCustomer(@RequestHeader("Authorization") String jwt) throws Exception {
@@ -149,6 +152,21 @@ public class BookingController {
 
         return ResponseEntity.ok(bookingSlotDtos);
     }
+
+    @GetMapping("/available-seats/salon/{salonId}")
+    public ResponseEntity<AvailableSeatsResponse> getAvailableSeats(
+            @PathVariable Long salonId,
+            @RequestParam LocalDateTime startTime,
+            @RequestParam Set<Long> serviceIds,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+
+        SalonDto salonDto = salonFeignClient.getSalonById(salonId).getBody();
+        Set<ServiceDto> services = serviceOfferingFeignClient.getServicesByIds(serviceIds).getBody();
+        List<SeatDto> allSeats = salonFeignClient.getAllSeats(jwt, salonDto.getId()).getBody();
+        AvailableSeatsResponse response = bookingService.getAvailableSeats(salonDto, startTime, services, allSeats);
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @GetMapping("/report")

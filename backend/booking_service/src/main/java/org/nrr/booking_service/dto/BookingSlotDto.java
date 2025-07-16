@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class BookingSlotDto {
-
     LocalDateTime startTime;
     LocalDateTime endTime;
 }
