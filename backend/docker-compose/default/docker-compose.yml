@@ -17,6 +17,8 @@ services:
     networks:
       - nrr
 
+
+
   bookingdb:
     image: mysql
     container_name: bookingdb
@@ -102,6 +104,94 @@ services:
     networks:
       - nrr
 
+  reviewdb:
+    image: mysql
+    container_name: reviewdb
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: [ "CMD","mysqladmin","ping","-h","localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reviewdb
+    networks:
+      - nrr
+
+  notificationdb:
+    image: mysql
+    container_name: notificationdb
+    ports:
+      - "3309:3306"
+    healthcheck:
+      test: [ "CMD","mysqladmin","ping","-h","localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notificationdb
+    networks:
+      - nrr
+
+  review:
+    image: "nishan259/review-service:v1"
+    ports:
+      - "5009:5009"
+    healthcheck:
+      test: "curl --fail --silent review:5009/actuator/health/readiness | grep UP || exist 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    container_name: review
+    depends_on:
+      reviewdb:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "USER-SERVICE"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://reviewdb:3306/reviewdb"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - nrr
+
+  notification:
+    image: "nishan259/notification-service:v1"
+    ports:
+      - "5008:5008"
+    healthcheck:
+      test: "curl --fail --silent notification:5008/actuator/health/readiness | grep UP || exist 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    container_name: notification
+    depends_on:
+      notificationdb:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "USER-SERVICE"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://notificationdb:3306/notificationdb"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - nrr
+
   eurekaserver:
     image: "nishan259/salon-eureka-server:v1"
     ports:
@@ -135,6 +225,8 @@ services:
       userdb:
         condition: service_healthy
     environment:
+      CLIENT_ID_N: "172120cd-deff-4dbd-b0cf-31f9c707598d"
+      CLIENT_SECRET_N: "94zS2UHhEEXYt9YDb4JWL4AvbdF7lPYj"
       SPRING_APPLICATION_NAME: "USER-SERVICE"
       SPRING_DATASOURCE_URL: "jdbc:mysql://userdb:3306/userdb"
       SPRING_DATASOURCE_USERNAME: root
@@ -189,7 +281,7 @@ services:
       paymentdb:
         condition: service_healthy
     environment:
-      KHALTI_SECRET_KEY: your api key
+      KHALTI_SECRET_KEY:
       SPRING_APPLICATION_NAME: "PAYMENT-SERVICE"
       SPRING_DATASOURCE_URL: "jdbc:mysql://paymentdb:3306/paymentdb"
       SPRING_DATASOURCE_USERNAME: root
@@ -286,7 +378,7 @@ services:
   gatewayserver:
     image: "nishan259/salon-gateway-server:v1"
     ports:
-      - "5000:5000"
+      - "9000:9000"
     healthcheck:
       test: "curl --fail --silent gatewayserver:5000/actuator/health/readiness | grep UP || exist 1"
       interval: 10s
@@ -303,6 +395,7 @@ services:
           memory: 700m
     networks:
       - nrr
+
 
 networks:
   nrr:

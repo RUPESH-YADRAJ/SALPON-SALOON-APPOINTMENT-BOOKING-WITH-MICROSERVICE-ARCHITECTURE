@@ -52,7 +52,8 @@ public class BookingServiceImpl implements BookingService {
             }
         }
 
-        int totalPrice = serviceDtoSet.stream().mapToInt(ServiceDto::getPrice).sum();
+        int perSeatPrice = serviceDtoSet.stream().mapToInt(ServiceDto::getPrice).sum();
+        int totalPrice = perSeatPrice * requestedSeatIds.size();
         Set<Long> serviceIds = serviceDtoSet.stream().map(ServiceDto::getId).collect(Collectors.toSet());
 
         Booking booking = Booking.builder()

@@ -104,18 +104,28 @@
 				<version>3.4.5</version>
 				<configuration>
 					<to>
-						<image>nishan259/salon-user:v1</image>
+						<image>nishan259/notification-service:v1</image>
 						<auth>
 							<username>nishan259</username>
-							<password>${JIB_TO_AUTH_PASSWORD}</password> <!-- safer -->
+							<password>${JIB_TO_AUTH_PASSWORD}</password>p <!-- safer -->
 						</auth>
 
 					</to>
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.30</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

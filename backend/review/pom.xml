@@ -90,7 +90,7 @@
 				<version>3.4.5</version>
 				<configuration>
 					<to>
-						<image>nishan259/salon-service:v1</image>
+						<image>nishan259/review-service:v1</image>
 						<auth>
 							<username>nishan259</username>
 							<password>${JIB_TO_AUTH_PASSWORD}</password>p <!-- safer -->
