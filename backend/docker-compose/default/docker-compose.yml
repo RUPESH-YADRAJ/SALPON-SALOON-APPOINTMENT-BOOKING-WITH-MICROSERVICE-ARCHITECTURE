@@ -153,7 +153,7 @@ services:
       reviewdb:
         condition: service_healthy
     environment:
-      SPRING_APPLICATION_NAME: "USER-SERVICE"
+      SPRING_APPLICATION_NAME: "REVIEW-SERVICE"
       SPRING_DATASOURCE_URL: "jdbc:mysql://reviewdb:3306/reviewdb"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
@@ -180,7 +180,7 @@ services:
       notificationdb:
         condition: service_healthy
     environment:
-      SPRING_APPLICATION_NAME: "USER-SERVICE"
+      SPRING_APPLICATION_NAME: "NOTIFICATION-SERVICE"
       SPRING_DATASOURCE_URL: "jdbc:mysql://notificationdb:3306/notificationdb"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
@@ -380,7 +380,7 @@ services:
     ports:
       - "9000:9000"
     healthcheck:
-      test: "curl --fail --silent gatewayserver:5000/actuator/health/readiness | grep UP || exist 1"
+      test: "curl --fail --silent gatewayserver:9000/actuator/health/readiness | grep UP || exist 1"
       interval: 10s
       timeout: 5s
       retries: 10
